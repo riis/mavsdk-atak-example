@@ -23,6 +23,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -35,6 +36,7 @@ class PluginTemplate(serviceController: IServiceController) : IPlugin {
     var uiService: IHostUIService?
     var toolbarItem: ToolbarItem?
     var templatePane: Pane? = null
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     private var positionTextView: TextView? = null
 
@@ -95,6 +97,7 @@ class PluginTemplate(serviceController: IServiceController) : IPlugin {
         if (isMavSdkServerRunning) {
             destroyMavsdkServer()
         }
+        coroutineScope.cancel()
     }
 
     private fun showPane() {
@@ -111,12 +114,7 @@ class PluginTemplate(serviceController: IServiceController) : IPlugin {
             )
             positionTextView = view.findViewById(R.id.positionTextView)
 
-            templatePane = PaneBuilder(
-                PluginLayoutInflater.inflate(
-                    pluginContext,
-                    R.layout.main_layout, null
-                )
-            ) // relative location is set to default; pane will switch location dependent on
+            templatePane = PaneBuilder(view) // relative location is set to default; pane will switch location dependent on
                 // current orientation of device screen
                 .setMetaValue(
                     Pane.RELATIVE_LOCATION,
@@ -129,11 +127,17 @@ class PluginTemplate(serviceController: IServiceController) : IPlugin {
                 .setMetaValue(Pane.PREFERRED_HEIGHT_RATIO, 0.5)
                 .build()
 
-            CoroutineScope(Dispatchers.IO).launch {
+            coroutineScope.launch {
                 position.collect { pair ->
                     val positionString = "Position: (${pair.first}, ${pair.second})"
+                    Log.d(TAG, "position collected: $positionString")
                     withContext(Dispatchers.Main) {
-                        positionTextView?.text = positionString
+                        if (positionTextView == null) {
+                            Log.e(TAG, "positionTextView is null!")
+                        } else {
+                            Log.d(TAG, "updating TextView with: $positionString")
+                            positionTextView?.text = positionString
+                        }
                     }
                 }
             }

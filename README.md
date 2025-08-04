@@ -95,3 +95,5 @@ val view = PluginLayoutInflater.inflate(
 ```
 
 Here we are inflating a layout from the resources and setting it up as a pane. The `PaneBuilder` allows us to specify how the pane should be displayed, including its size and position on the screen. We could've expanded our view into it's own class, but for simplicity we are just using the `PluginLayoutInflater` to inflate the layout directly in the `PluginTemplate` class. We can then just use the default `showPane()` function to show our custom view.
+
+If I wanted to create another view in the same way, I could create another XML layout file and switch between them in the `showPane()` method. This allows us to have multiple views and switch between them as needed. At that point I would likely be creating a new class for each view to keep things organized, but for simplicity's sake I've left it in `PluginTemplate`.

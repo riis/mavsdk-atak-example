@@ -36,6 +36,23 @@ COMPILATION
 
 ## Compilation Instructions
 
+1. Download the 5.5 Release from tak.gov
+2. Unzip the 5.5 Release to a directory of your choice
+3. `cd` into the 5.5 Release directory
+4. make a directory called `plugins` if it doesn't already exist
+5. `git clone` this repository into the `plugins` directory
+6. Open it in Android Studio
+7. Make sure your Gradle version is 8+ and Java version is 17/21
+8. Project should build successfully, make sure to use a physical device and run the plugin
+
+## Using MavSDK
+
+1. Take note of your Android device's and computer's IP Address
+2. `docker run --rm -it -p 8554:8554 jonasvautherin/px4-gazebo-headless:1.13.2 -v typhoon_h480 <PHONE_IP> <COMPUTER_IP>`
+3. For me this looks like `docker run --rm -it -p 8554:8554 jonasvautherin/px4-gazebo-headless:1.13.2 -v typhoon_h480 192.168.2.15 192.168.2.182`
+4. Run the app after setting it up from steps above
+5. Open side bar and navigate to this plugin -> check side bar
+
 _________________________________________________________________
 DEVELOPER NOTES
 

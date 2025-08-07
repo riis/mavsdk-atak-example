@@ -14,7 +14,7 @@ class PluginTemplateLifecycle(serviceController: IServiceController) : AbstractP
     serviceController,
     PluginTemplateTool(
         serviceController.getService<PluginContextProvider?>(PluginContextProvider::class.java)
-            .getPluginContext()
+            .pluginContext
     ),
     PluginTemplateMapComponent()
 ) {
@@ -22,7 +22,7 @@ class PluginTemplateLifecycle(serviceController: IServiceController) : AbstractP
         PluginNativeLoader.init(
             serviceController.getService<PluginContextProvider?>(
                 PluginContextProvider::class.java
-            ).getPluginContext()
+            ).pluginContext
         )
     }
 
